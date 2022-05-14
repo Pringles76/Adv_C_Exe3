@@ -70,7 +70,7 @@ void push(Stack* s, char data)
 char pop(Stack* s)
 {
 	// case [1/3]: empty stack
-	if (isEmptyStack(&s) == 1)
+	if (isEmptyStack(s) == 1)
 	{
 		puts("Error: pop >> unable to pop because the stack is empty.");
 		return NULL;
@@ -83,7 +83,7 @@ char pop(Stack* s)
 	// case [2/3]: one item stack
 	if (s->head->next == NULL)
 	{
-		initStack(&s);
+		initStack(s);
 		return item;
 	}
 
@@ -174,7 +174,7 @@ int isPalindrome(Stack* s)
 	}
 
 	// Case [2/3]: Empty Stack
-	if (isEmptyStack(&s) == 1)
+	if (isEmptyStack(s) == 1)
 	{
 		return 1;
 	}
@@ -184,16 +184,16 @@ int isPalindrome(Stack* s)
 	int counter = 0;
 
 	// Poping into the container
-	while (isEmptyStack(&s) != 1)
+	while (isEmptyStack(s) != 1)
 	{
-		container[counter] = pop(&s);
+		container[counter] = pop(s);
 		counter++;
 	}
 
 	// Palindrom checking
 	for (int i = 0; i < counter / 2; i++)
 	{
-		if (container[i] == container[i - counter])
+		if (container[i] == container[counter - 1 - i])
 		{
 			continue;
 		}
@@ -218,7 +218,7 @@ void rotateStack(Stack* s, int n)
 	}
 
 	// case [2/7]: Empty stack
-	if (isEmptyStack(&s) == 1)
+	if (isEmptyStack(s) == 1)
 	{
 		puts("Error: Rotate >> unable to rotate stack because the stack is empty.");
 		return;
@@ -261,19 +261,21 @@ void rotateStack(Stack* s, int n)
 	// case [7/7]: No special problems
 	Stack S5;
 	Stack S6;
+	initStack(&S5);
+	initStack(&S6);
 	char temp;
 
 	// Top items transfer from s to S5
 	for (int i = 1; i <= (counter - n); i++)
 	{
-		temp = pop(&s);
+		temp = pop(s);
 		push(&S5, temp);
 	}
 
 	// Bottom items transfer from s to S6
-	for (int j = 1; j = n; j++)
+	for (int j = 1; j <= n; j++)
 	{
-		temp = pop(&s);
+		temp = pop(s);
 		push(&S6, temp);
 	}
 	
@@ -281,13 +283,13 @@ void rotateStack(Stack* s, int n)
 	for (int k = 1; k <= (counter - n); k++)
 	{
 		temp = pop(&S5);
-		push(&s, temp);
+		push(s, temp);
 	}
 
 	// Bottom items transfer from S6 to s
-	for (int l = 1; l = n; l++)
+	for (int l = 1; l <= n; l++)
 	{
 		temp = pop(&S6);
-		push(&s, temp);
+		push(s, temp);
 	}
 }

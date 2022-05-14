@@ -83,10 +83,7 @@ unsigned int dequeue(Queue* q)
 	if (q->head == q->tail)
 	{
 		// function actions
-		free(q->head);
-		free(q->tail);
-		q->head = NULL;
-		q->tail = NULL;
+		initQueue(q);
 		return item;
 	}
 
@@ -114,7 +111,75 @@ int isEmptyQueue(const Queue* q)
 
 void rotateQueue(Queue* q)
 {
-	// add your code here
+	// Case [1/4]: Unexisting queue
+	if (q == NULL)
+	{
+		puts("Error: Rotate >> unable to rotate queue because the queue doesn't exist.");
+		return;
+	}
+
+	// Case [2/4]: Empty queue
+	if (isEmptyQueue(q) == 1)
+	{
+		puts("Error: Rotate >> unable to rotate queue because the queue is empty.");
+		return;
+	}
+
+	// Case [3/4]: One item queue
+	if (q->head->next == NULL)
+	{
+		return;			// no special actions requiered;
+	}
+
+
+	// Case [4/4]: General case
+	intNode* temp = q->head;
+	Queue Q1;
+	initQueue(&Q1);
+	int counter = 0;
+
+	// Transfer from q to Q1
+	while (1)
+	{
+		int num = dequeue(q);
+		if (isEmptyQueue(q))
+		{
+			enqueue(q, num);
+			break;
+		}
+		else
+		{
+			counter++;
+			enqueue(&Q1, num);
+		}
+	}
+
+	// Transfer from Q1 back to q
+	for (int i = 1; i <= counter; i++)
+	{
+		int I = dequeue(&Q1);
+		enqueue(q, I);
+	}
+
+	//// Case [4/4]: General case
+	//intNode* prev = NULL;
+	//intNode* curr = q->head;
+	//intNode* next = q->head->next;
+	//q->tail = q->head;
+
+	//// Rotation
+	//while (next != NULL)
+	//{
+	//	curr->next = prev;
+	//	prev = curr;
+	//	curr = next;
+	//	next = next->next;
+	//}
+
+	//// Rotation finish
+	//curr->next = prev;
+	//q->head = curr;
+	//return;
 }
 
 void cutAndReplace(Queue* q)
@@ -124,5 +189,25 @@ void cutAndReplace(Queue* q)
 
 void sortKidsFirst(Queue* q)
 {
-	// add your code here
+	int numbers[50], length = 0;
+	while (isEmptyQueue(q) != 1)
+	{
+		numbers[length] = dequeue(q);
+		length++;
+	}
+
+	for (int i = 0; i < length * length; i++)
+	{
+		if (numbers[(i % length) + 1] > numbers[(i % length)])
+		{
+			int temp = numbers[(i % length) + 1];
+			numbers[(i % length) + 1] = numbers[(i % length)];
+			numbers[(i % length)] = temp;
+		}
+	}
+
+	for (int i = 0; i < length; i++)
+	{
+		enqueue(q, numbers[length - i - 1]);
+	}
 }
